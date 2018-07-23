@@ -2,12 +2,17 @@ import React from "react"
 //import * as BooksAPI from './BooksAPI'
 import "./App.css"
 import { Link } from "react-router-dom"
+import PropTypes from 'prop-types'
 
 class BookPage extends React.Component {
-  render() {
+  static propTypes={
+  updateShelf:PropTypes.func.isRequired
+  }
+  
+  render() { 
     this.props.books.map((book) => {
       console.log(book)
-      return book
+      return book 
     })
     return (
       <div className="list-books">
@@ -37,7 +42,7 @@ class BookPage extends React.Component {
                                   }}
                                 />
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select onChange={(event)=>{this.props.updateShelf(book,event.target.value);}} value={book.shelf}>
                                     <option value="move" disabled>
                                       Move to...
                                     </option>
@@ -82,7 +87,7 @@ class BookPage extends React.Component {
                                   }}
                                 />
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select onChange={(event)=>{this.props.updateShelf(book,event.target.value);}}value={book.shelf}>
                                     <option value="move" disabled>
                                       Move to...
                                     </option>
@@ -128,7 +133,7 @@ class BookPage extends React.Component {
                                   }}
                                 />
                                 <div className="book-shelf-changer">
-                                  <select>
+                                  <select onChange={(event)=>{this.props.updateShelf(book,event.target.value);}}value={book.shelf}>
                                     <option value="move" disabled>
                                       Move to...
                                     </option>
