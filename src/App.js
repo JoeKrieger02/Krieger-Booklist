@@ -22,45 +22,43 @@ componentDidMount(){
 
 
 
-/*UpdateBook=(books: any, shelf: string)=> {
-	BooksAPI.update(books, shelf).then(response=> {
-		this.GetDisplayedBook();
-	})
+updatedBook=(event, books)=> {
+	this.setState({books: event.target.value})
+  
 }
-*/
+
+
 /*
-GetDisplayedBook = (e, UpdatedBook) => {
-  const shelf = e.target.value
-  const book = this.state.book
-    e.preventDefault()
-      UpdatedBook.shelf = e.target.value
-      this.setState({ books })
-    	
+getShelf= (event, book) => {
+  	const shelf = event.target.value;
+  	event.preventDefault()
+  	book.shelf = event.target.value
+  	this.setState({ book })
+	
+	BooksAPI.update(book, shelf).then (updated => {
+    	this.setState(state => ({
+        book: state.book
+          .filter(b => b.id !== book.id)
+          .concat([book])
+      }))
+    })
+  }
+
 */
-
-UpdateBook = ( updatedBook, updatedShelf) => {
-	BooksAPI.update(updatedBook, updatedShelf).then (response => {
-	 let newBookId = this.state.books.filter( book => book.id !== updatedBook.id )	
-      updatedShelf.shelf = updatedShelf
-      updatedBook.push(newBookId);
-      this.setState({ books : updatedBook})  	
-	})
-}
-
   render() {
     return (
     <BrowserRouter>
       <div className="app">
       	<Route exact path="/" render={()=> (
     		<BookPage 
-    			UpdateBook={this.UpdateBook}
+    			UpdatedBook={this.UpdatedBook}
 				books={this.state.books}
 			/>
 		)}/>
 		<Route path="/SearchPage" render={()=> (
       		<SearchPage
              	books={this.state.books}
-				UpdateBook={this.UpdateBook}
+				UpdatedBook={this.UpdatedBook}
 			/>
 		)}/>
 	</div> 
