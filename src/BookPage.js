@@ -20,7 +20,6 @@ class BookPage extends React.Component {
               <h2 className="bookshelf-title">Currently Reading</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                  
                     {this.props.books
                       .filter((book) => book.shelf === "currentlyReading")
                       .map((book, index) => {
@@ -59,7 +58,6 @@ class BookPage extends React.Component {
                           </li>
                         )
                       })}
-                  
                 </ol>
               </div>
             </div>
@@ -67,7 +65,6 @@ class BookPage extends React.Component {
               <h2 className="bookshelf-title">Want to Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                  <ol>
                     {this.props.books
                       .filter((book) => book.shelf === "wantToRead")
                       .map((book, index) => {
@@ -106,15 +103,14 @@ class BookPage extends React.Component {
                           </li>
                         )
                       })}
-                  </ol>
-                </ol>
+                  </ol> 
               </div>
             </div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                  <ol>
+                  
                     {this.props.books
                       .filter((book) => book.shelf === "read")
                       .map((book, index) => {
@@ -154,7 +150,6 @@ class BookPage extends React.Component {
                         )
                       })}
                   </ol>
-                </ol>
               </div>
             </div>
           </div>
