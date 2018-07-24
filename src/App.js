@@ -10,7 +10,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 class App extends React.Component {
   state= {
-    books: []
+    books: [],
+    queriedBooks: []
    
   }
 
@@ -20,8 +21,12 @@ componentDidMount(){
 		console.log(JSON.stringify(books))
 	})
 }
-
-
+/*
+findBook = (query) ={
+ BooksAPI.search(query).then((result) => {
+ this.setState({queriedBooks: []
+               })}
+*/
 updateShelf=(book, shelf)=> {
 	BooksAPI.update(book,shelf).then(()=>{
       //this.getBooks()
@@ -31,6 +36,7 @@ updateShelf=(book, shelf)=> {
     })
 
   }
+
 
 
   render() {
@@ -43,7 +49,7 @@ updateShelf=(book, shelf)=> {
 				books={this.state.books}
 			/>
 		)}/>
-		<Route path="/SearchPage" render={()=> (
+		<Route path="/Search" render={()=> (
       		<SearchPage
              	books={this.state.books}
 				updateShelf={this.updateShelf}
