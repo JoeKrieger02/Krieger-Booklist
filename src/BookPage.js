@@ -117,7 +117,7 @@ class BookPage extends React.Component {
                 <ol className="books-grid">
                   
                     {this.props.books
-                      .filter((book) => book.shelf === "read")
+                      .filter((book) => book.title === "read")
                       .map((book, index) => {
                         return (
                           <li key={index}>
@@ -160,7 +160,7 @@ class BookPage extends React.Component {
           </div>
         </div>
         <div className="open-search">
-          <Link to="/SearchPage">Search</Link>
+          <Link to="/Search">Search</Link>
         </div>
       </div>
     )
