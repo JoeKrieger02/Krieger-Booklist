@@ -12,6 +12,7 @@ class SearchPage extends Component {
   state = {
 		query:'',
  		 books: []
+    
 	}
 
 	static PropTypes = {
@@ -20,36 +21,15 @@ class SearchPage extends Component {
     } 
 	
 	updateQuery = (query) => {
-    this.setState({ query: query.trim() })
+    this.setState({ query: query.target.value })
+      this.props.search(this.state.query)
     }
-/*
-	clearQuery = () => {
-     this.setState({ query:'' })
-    }
-*/
-	componentWillUnmount(){
-	BooksAPI.getAll().then((books) => {
-		this.props.updateQuery("")
-	})
-}
 
 render (){
-  
-  	//const { queriedBooks } = this.props
-
 	const { query } = this.state
- /* 
-	let showingBooks
-	if (query) {
-    	const match = new RegExp(escapeRegExp(query), 'i')
-      	showingBooks = books.filter((books) => match.test(books.name))
-    } else {
-     showingBooks = books
-    }
-*/
-  this.props.books.map((book) => {
-      //console.log(book)
-      return book 
+	this.props.books.map((book) => {
+    //console.log(book)
+    return book 
     })
 
 	return (
