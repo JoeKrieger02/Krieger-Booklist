@@ -2,19 +2,13 @@ import React, {Component} from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
-import serializeForm from 'form-serialize'
+//import escapeRegExp from 'escape-string-regexp'
+//import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
+//import updateShelf from './BookPage'
 
 
-class SearchPage extends Component {
-	handleSubmit = (e) => {
-    e.preventDefault()
-      const values = serializeForm(e.target, {hash:true})
-      if (this.props.onSearchPage)
-        this.props.onSearchPage(values)
-    }	
-  
+class SearchPage extends Component {	
   state = {
 		query:'',
  		 books: []
@@ -22,27 +16,29 @@ class SearchPage extends Component {
 
 	static PropTypes = {
     books: PropTypes.array.isRequired,
-    onShelfUpdate: PropTypes.func.isRequired
+    updateShelf: PropTypes.func.isRequired
     } 
 	
 	updateQuery = (query) => {
     this.setState({ query: query.trim() })
     }
-
+/*
 	clearQuery = () => {
      this.setState({ query:'' })
     }
-	
-	componentDidMount(){
+*/
+	componentWillUnmount(){
 	BooksAPI.getAll().then((books) => {
-		this.setState({ books })
+		this.props.updateQuery("")
 	})
 }
 
 render (){
-  	const { books, onShelfUpdate } = this.props
-	const { query } = this.state
   
+  	//const { queriedBooks } = this.props
+
+	const { query } = this.state
+ /* 
 	let showingBooks
 	if (query) {
     	const match = new RegExp(escapeRegExp(query), 'i')
@@ -50,22 +46,24 @@ render (){
     } else {
      showingBooks = books
     }
-
-	//showingBooks.sort(Sortby('name'))
+*/
+  this.props.books.map((book) => {
+      //console.log(book)
+      return book 
+    })
 
 	return (
 	<div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-              <div className="search-books-input-wrapper">
-                
+              <Link className="close-search" to="/" >Close</Link>
+              <div className="search-books-input-wrapper"> 
                 <input 
 					type="text" 
-					value={query} 
+					value={this.state.query} 
 					onChange={(event) => this.updateQuery(event.target.value)}
 					placeholder="Search by title or author"
 				/>
-				<Link to='/BookPage'
+				<Link to='/'
 				className='return'
 				>Go Back</Link>
 
@@ -74,13 +72,40 @@ render (){
             </div>
             <div className="search-books-results">
               	<ol className="books-grid">
-					{showingBooks.map((books) => ( 
- 						<li 
-                     		key={books.id} 
-							className='book-list-item'>
-						
-							books={books}
-							onShelfUpdate={onShelfUpdate} 
+                      {this.props.books
+                      .filter((book) => book.title === BooksAPI.search(query))
+                      .map((book, index) => (
+							<li key={index}>
+                            <div className="book">
+                              <div className="book-top">
+                                <div
+                                  className="book-cover"
+                                  style={{
+                                    width: 128,
+                                    height: 193,
+                                    backgroundImage:
+                                      'url("' + book.imageLinks.thumbnail + '")'
+                                  }}
+                                />
+                                <div className="book-shelf-changer">
+                                  <select onChange={(event)=>{this.props.updateShelf(book,event.target.value);}} value={book.shelf}>
+                                    <option value="move" disabled>
+                                      Move to...
+                                    </option>
+                                    <option value="currentlyReading">
+                                      Currently Reading
+                                    </option>
+                                    <option value="wantToRead">
+                                      Want to Read
+                                    </option>
+                                    <option value="read">Read</option>
+                                    <option value="none">None</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="book-title">{book.title}</div>
+                              <div className="book-authors">{book.authors}</div>
+                            </div>                         
 						</li>
 					))}
 				</ol>
