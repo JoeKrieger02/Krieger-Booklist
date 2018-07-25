@@ -15,6 +15,11 @@ class App extends React.Component {
    
   }
 
+headers = {
+  'Authorization': "sai",   
+  'Content-Type': 'application/json' 
+}
+
 componentDidMount(){
 	BooksAPI.getAll().then((books) => {
 		this.setState({ books })
