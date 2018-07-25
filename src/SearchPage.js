@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-import * as BooksAPI from './BooksAPI'
+//import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Link } from 'react-router-dom'
-//import escapeRegExp from 'escape-string-regexp'
+import escapeRegExp from 'escape-string-regexp'
 //import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 //import updateShelf from './BookPage'
+import sortBy from 'sort-by'
 
 
 class SearchPage extends Component {	
@@ -15,14 +16,21 @@ class SearchPage extends Component {
     
 	}
 
+	
+
 	static PropTypes = {
     books: PropTypes.array.isRequired,
     updateShelf: PropTypes.func.isRequired
     } 
-	
+	/*
 	updateQuery = (query) => {
     this.setState({ query: query.target.value })
       this.props.search(this.state.query)
+    }
+*/
+
+updateQuery = (query) => {
+    this.setState({ query: query.trim() })
     }
 
 render (){
@@ -32,6 +40,19 @@ render (){
     return book 
     })
 
+	//test
+	
+	const { books } = this.props
+	let showingBooks
+    if (query) {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      showingBooks = books.filter((book) => match.test(book.title))
+    } else {
+      showingBooks = books
+    }
+
+	showingBooks.sort(sortBy('title'))
+
 	return (
 	<div className="search-books">
             <div className="search-books-bar">
@@ -39,7 +60,7 @@ render (){
               <div className="search-books-input-wrapper"> 
                 <input 
 					type="text" 
-					value={this.state.query} 
+					value={query} 
 					onChange={(event) => this.updateQuery(event.target.value)}
 					placeholder="Search by title or author"
 				/>
@@ -52,8 +73,8 @@ render (){
             </div>
             <div className="search-books-results">
               	<ol className="books-grid">
-                      {this.props.books
-                      .filter((book) => book.title === BooksAPI.search(query))
+                     
+						{showingBooks
                       .map((book, index) => (
 							<li key={index}>
                             <div className="book">
