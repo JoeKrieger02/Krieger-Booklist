@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 //import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 //import updateShelf from './BookPage'
-import sortBy from 'sort-by'
+//import sortBy from 'sort-by'
 
 
 class SearchPage extends Component {	
@@ -78,7 +78,6 @@ render (){
             </div>
             <div className="search-books-results">
               	<ol className="books-grid">
-                     
 						{this.showingBooks.map((book, index) => (
 							<li key={index}>
                             <div className="book">
