@@ -53,7 +53,10 @@ render (){
   
   if(query) {
   BooksAPI.search(query,30).then((books) => {
-	this.showingBooks= books
+    if (books.length >= 1) {
+	this.showingBooks= books }
+    else{ console.log("no books found")
+    }
   })}
 
 
