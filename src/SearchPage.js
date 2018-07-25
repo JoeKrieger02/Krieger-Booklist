@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-//import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
+//import escapeRegExp from 'escape-string-regexp'
 //import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 //import updateShelf from './BookPage'
@@ -16,46 +16,51 @@ class SearchPage extends Component {
     
 	}
 
-	
+constructor(props) { 
+  	super(props)
+	this.showingBooks = []
+}
 
 	static PropTypes = {
     books: PropTypes.array.isRequired,
     updateShelf: PropTypes.func.isRequired
     } 
-	/*
-	updateQuery = (query) => {
-    this.setState({ query: query.target.value })
-      this.props.search(this.state.query)
-    }
-*/
+
 
 updateQuery = (query) => {
     this.setState({ query: query.trim() })
     }
 
-render (){
-	const { query } = this.state
-	this.props.books.map((book) => {
-    //console.log(book)
-    return book 
-    })
 
-	//test
-	
+                             
+render (){
+ /*
+	const { query } = this.state
+
 	const { books } = this.props
-	let showingBooks
+	//let showingBooks
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
-      showingBooks = books.filter((book) => match.test(book.title))
+      this.showingBooks = books.filter((book) => match.test(book.title))
     } else {
-      showingBooks = books
+      this.showingBooks = books
     }
 
-	showingBooks.sort(sortBy('title'))
+	this.showingBooks.sort(sortBy('title'))
+*/
+	const {query} = this.state
+  	//const { books } = this.props
+  
+  if(query) {
+  BooksAPI.search(query,30).then((books) => {
+	this.showingBooks= books
+  })}
+
 
 	return (
-	<div className="search-books">
-            <div className="search-books-bar">
+      
+<div className="search-books">
+	            <div className="search-books-bar">
               <Link className="close-search" to="/" >Close</Link>
               <div className="search-books-input-wrapper"> 
                 <input 
@@ -74,8 +79,7 @@ render (){
             <div className="search-books-results">
               	<ol className="books-grid">
                      
-						{showingBooks
-                      .map((book, index) => (
+						{this.showingBooks.map((book, index) => (
 							<li key={index}>
                             <div className="book">
                               <div className="book-top">
