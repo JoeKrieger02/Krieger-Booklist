@@ -117,7 +117,7 @@ class BookPage extends React.Component {
                 <ol className="books-grid">
                   
                     {this.props.books
-                      .filter((book) => book.title === "read")
+                      .filter((book) => book.shelf === "read")
                       .map((book, index) => {
                         return (
                           <li key={index}>
