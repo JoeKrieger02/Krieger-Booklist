@@ -7,26 +7,51 @@ import PropTypes from "prop-types"
 class SearchPage extends Component {
   state = {
     query: "",
-    books: []
+    books: [],
+    showingBooks: []
   }
-
+/*
   constructor(props) {
     super(props)
     this.showingBooks = []
   }
+*/
+ 	 static PropTypes = {
+   	 	books: PropTypes.array.isRequired,
+   	 	updateShelf: PropTypes.func.isRequired
+  	}
 
-  static PropTypes = {
-    books: PropTypes.array.isRequired,
-    updateShelf: PropTypes.func.isRequired
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-  }
-
+	ComponentWillUnmount(){
+ 		 this.props.updateQuery("");
+	}
+/*
+  	updateQuery = (query) => {
+   		 this.props.updateQuery(query.trim());
+  	}
+ 	*/
+	updateQuery = (event) => {
+      const query = event.target.value.trim()
+      this.setState({ query: query })
+      
+        if (query) {
+      BooksAPI.search(query, 30).then((books) => {
+        if (books.length >= 1 && !books.error) {
+          this.setState({showingBooks: books})
+        } else if (books.error) {
+          console.log("error, no books found")
+          this.setState({showingBooks: []})
+        } else {
+          console.log("no books found")
+          this.setState({showingBooks: []})
+        }
+      })
+        }}
+    
+	
   render() {
-    const { query } = this.state
-
+    const { query, showingBooks } = this.state
+	
+/*
     if (query) {
       BooksAPI.search(query, 30).then((books) => {
         if (books.length >= 1) {
@@ -38,6 +63,7 @@ class SearchPage extends Component {
     } else {
     this.showingBooks = []
     }
+*/
 
     return (
       <div className="search-books">
@@ -49,14 +75,14 @@ class SearchPage extends Component {
             <input
               type="text"
               value={query}
-              onChange={(event) => this.updateQuery(event.target.value)}
+              onChange={this.updateQuery}
               placeholder="Search by title or author"
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.showingBooks.map((book, index) => (
+            {showingBooks.map((book, index) => (
               <li key={index}>
                 <div className="book">
                   <div className="book-top">
