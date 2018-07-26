@@ -10,12 +10,7 @@ class SearchPage extends Component {
     books: [],
     showingBooks: []
   }
-/*
-  constructor(props) {
-    super(props)
-    this.showingBooks = []
-  }
-*/
+
  	 static PropTypes = {
    	 	books: PropTypes.array.isRequired,
    	 	updateShelf: PropTypes.func.isRequired
@@ -30,13 +25,14 @@ class SearchPage extends Component {
   	}
  	*/
 	updateQuery = (event) => {
-      const query = event.target.value.trim()
+      const query = event.target.value//.trim()
       this.setState({ query: query })
       
         if (query) {
       BooksAPI.search(query, 30).then((books) => {
-        if (books.length >= 1 && !books.error) {
+        if (books.length >= 1 && !books.error ) {
           this.setState({showingBooks: books})
+          
         } else if (books.error) {
           console.log("error, no books found")
           this.setState({showingBooks: []})
@@ -46,24 +42,14 @@ class SearchPage extends Component {
         }
       })
         }}
-    
+    getShelf(result){
+    let bookShelf = this.props.books.filter(book => book.id === result.id)
+	return bookShelf.length ? bookShelf[0].shelf : "none" 
+    }
 	
   render() {
     const { query, showingBooks } = this.state
-	
-/*
-    if (query) {
-      BooksAPI.search(query, 30).then((books) => {
-        if (books.length >= 1) {
-          this.showingBooks = books
-        } else {
-          console.log("no books found")
-        }
-      })
-    } else {
-    this.showingBooks = []
-    }
-*/
+		
 
     return (
       <div className="search-books">
@@ -82,8 +68,8 @@ class SearchPage extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book, index) => (
-              <li key={index}>
+            {showingBooks.map((book) => (
+              <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div
@@ -115,7 +101,7 @@ class SearchPage extends Component {
                     </div>
                   </div>
                   <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors}</div>
+                  <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
                 </div>
               </li>
             ))}
