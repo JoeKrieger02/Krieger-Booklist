@@ -27,7 +27,7 @@ class BookPage extends React.Component {
                     .filter((book) => book.shelf === "currentlyReading")
                     .map((book, index) => {
                       return (
-                        <li key={index}>
+                        <li key={book.id}>
                           <div className="book">
                             <div className="book-top">
                               <div
@@ -64,7 +64,7 @@ class BookPage extends React.Component {
                               </div>
                             </div>
                             <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
+                            <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
                           </div>
                         </li>
                       )
@@ -80,7 +80,7 @@ class BookPage extends React.Component {
                     .filter((book) => book.shelf === "wantToRead")
                     .map((book, index) => {
                       return (
-                        <li key={index}>
+                        <li key={book.id}>
                           <div className="book">
                             <div className="book-top">
                               <div
@@ -117,7 +117,7 @@ class BookPage extends React.Component {
                               </div>
                             </div>
                             <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
+                            <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
                           </div>
                         </li>
                       )
@@ -133,7 +133,7 @@ class BookPage extends React.Component {
                     .filter((book) => book.shelf === "read")
                     .map((book, index) => {
                       return (
-                        <li key={index}>
+                        <li key={book.id}>
                           <div className="book">
                             <div className="book-top">
                               <div
@@ -170,7 +170,7 @@ class BookPage extends React.Component {
                               </div>
                             </div>
                             <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
+                            <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
                           </div>
                         </li>
                       )
