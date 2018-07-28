@@ -3,36 +3,50 @@ import * as BooksAPI from "./BooksAPI"
 import "./App.css"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
+import BookPage from "./BookPage"
+//import {book} from "./BookPage"
+
 
 class SearchPage extends Component {
   state = {
     query: "",
     books: [],
     showingBooks: []
+   
   }
 
  	 static PropTypes = {
+       //book: PropTypes.object.isRequired,
    	 	books: PropTypes.array.isRequired,
-   	 	updateShelf: PropTypes.func.isRequired
+   	 	updateShelf: PropTypes.func.isRequired,
   	}
+
+	getCurrentShelf(book) {
+      	console.log("book " + BookPage.book)
+      	let currentShelf = 'none'
+      	const item = BookPage.book
+      	console.log("item " +item)
+		if(item.id === book.id) {
+			currentShelf = book.shelf
+			return currentShelf
+			}
+		}
+            
 
 	ComponentWillUnmount(){
  		 this.props.updateQuery("");
 	}
-/*
-  	updateQuery = (query) => {
-   		 this.props.updateQuery(query.trim());
-  	}
- 	*/
+
 	updateQuery = (event) => {
       const query = event.target.value//.trim()
       this.setState({ query: query })
       
         if (query) {
       BooksAPI.search(query, 30).then((books) => {
+        
         if (books.length >= 1 && !books.error ) {
           this.setState({showingBooks: books})
-          
+    		 
         } else if (books.error) {
           console.log("error, no books found")
           this.setState({showingBooks: []})
@@ -42,22 +56,40 @@ class SearchPage extends Component {
         }
       })
         }}
-    getShelf(result){
-    let bookShelf = this.props.books.filter(book => book.id === result.id)
-	return bookShelf.length ? bookShelf[0].shelf : "none" 
-    }
+      
+     
 	
-  render() {
-    const { query, showingBooks } = this.state
-		
 
+		/*
+            */
+   
+
+
+  
+
+
+  render() {
+    const { query, showingBooks, currentShelf} = this.state	
+	//const { books } = this.props
+	//let  currentShelf  = 'none'
+	/*
+	let currentShelf = 'none'
+	for (let instance of books) {
+		if(instance.id === book.id) {
+			currentShelf = instance.shelf
+			break
+		}
+	}
+*/
     return (
       <div className="search-books">
+
         <div className="search-books-bar">
           <Link className="close-search" to="/">
             Close
           </Link>
           <div className="search-books-input-wrapper">
+      
             <input
               type="text"
               value={query}
@@ -68,8 +100,9 @@ class SearchPage extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book) => (
-              <li key={book.id}>
+            {showingBooks.map((book, id) => (
+              <li key={book.id} >
+				
                 <div className="book">
                   <div className="book-top">
                     <div
@@ -78,24 +111,27 @@ class SearchPage extends Component {
                         width: 128,
                         height: 193,
                         backgroundImage:
-                          'url("' + book.imageLinks.thumbnail + '")'
+                          book.imageLinks === undefined ? 'url("  http://via.placeholder.com/128x193?text=No%20Cover  ")' : 'url("' + book.imageLinks.thumbnail + '")'
                       }}
                     />
                     <div className="book-shelf-changer">
+
+						
+						{this.getCurrentShelf(book)}
+						
                       <select
-                        onChange={(event) => {
-                          this.props.updateShelf(book, event.target.value)
-                        }}
-                        value={book.shelf}
-                      >
-                        <option value="move" disabled>
-                          Move to...
-                        </option>
-                        <option value="currentlyReading">
-                          Currently Reading
-                        </option>
+                        onChange={(event) => {this.props.updateShelf(book, event.target.value)}} 
+						//onClick={this.getCurrentShelf()}
+						
+						defaultValue={currentShelf}
+						
+
+						
+                      >	
+                        <option value="move" disabled>Move to...</option>
+                        <option value="currentlyReading"> Currently Reading </option>
                         <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
+                        <option value="read"> Read</option>
                         <option value="none">None</option>
                       </select>
                     </div>
