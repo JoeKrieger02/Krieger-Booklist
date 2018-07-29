@@ -3,16 +3,12 @@ import * as BooksAPI from "./BooksAPI"
 import "./App.css"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
-//import {book} from './BookPage'
-//let currentShelf = "none"
 
 class SearchPage extends Component {
   state = {
     query: "",
     books: [],
     showingBooks: []
-   
-   
   }
 
   static PropTypes = {
@@ -23,18 +19,14 @@ class SearchPage extends Component {
 
   getCurrentShelf(item) {
     let currentShelf = "none"
-     //let currentBook = ""
-    //const {books} = this.props
-    //var book = books.map(a => a.book)
+
     this.props.books.map((book) => {
-      
-    //let currentShelf = "none"
-    if (item.id === book.id) {
-      currentShelf = book.shelf 
-    }
+      if (item.id === book.id) {
+        currentShelf = book.shelf
+      }
       return currentShelf
     })
-   return currentShelf
+    return currentShelf
   }
 
   ComponentWillUnmount() {
@@ -61,9 +53,8 @@ class SearchPage extends Component {
   }
 
   render() {
-    const { query, showingBooks} = this.state
-	
-	
+    const { query, showingBooks } = this.state
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -97,14 +88,11 @@ class SearchPage extends Component {
                       }}
                     />
                     <div className="book-shelf-changer">
-                     
-
                       <select
                         onChange={(event) => {
                           this.props.updateShelf(book, event.target.value)
                         }}
                         defaultValue={this.getCurrentShelf(book)}
-						
                       >
                         <option value="move" disabled>
                           Move to...
