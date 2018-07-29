@@ -3,9 +3,8 @@ import * as BooksAPI from "./BooksAPI"
 import "./App.css"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
-import BookPage from "./BookPage"
-//import {book} from "./BookPage"
-
+//import {book} from './BookPage'
+//let currentShelf = "none"
 
 class SearchPage extends Component {
   state = {
@@ -13,83 +12,65 @@ class SearchPage extends Component {
     books: [],
     showingBooks: []
    
+   
   }
 
- 	 static PropTypes = {
-       //book: PropTypes.object.isRequired,
-   	 	books: PropTypes.array.isRequired,
-   	 	updateShelf: PropTypes.func.isRequired,
-  	}
+  static PropTypes = {
+    book: PropTypes.object.isRequired,
+    books: PropTypes.array.isRequired,
+    updateShelf: PropTypes.func.isRequired
+  }
 
-	getCurrentShelf(book) {
-      	console.log("book " + BookPage.book)
-      	let currentShelf = 'none'
-      	const item = BookPage.book
-      	console.log("item " +item)
-		if(item.id === book.id) {
-			currentShelf = book.shelf
-			return currentShelf
-			}
-		}
-            
-
-	ComponentWillUnmount(){
- 		 this.props.updateQuery("");
-	}
-
-	updateQuery = (event) => {
-      const query = event.target.value//.trim()
-      this.setState({ query: query })
+  getCurrentShelf(item) {
+    let currentShelf = "none"
+     //let currentBook = ""
+    //const {books} = this.props
+    //var book = books.map(a => a.book)
+    this.props.books.map((book) => {
       
-        if (query) {
+    //let currentShelf = "none"
+    if (item.id === book.id) {
+      currentShelf = book.shelf 
+    }
+      return currentShelf
+    })
+   return currentShelf
+  }
+
+  ComponentWillUnmount() {
+    this.props.updateQuery("")
+  }
+
+  updateQuery = (event) => {
+    const query = event.target.value //.trim()
+    this.setState({ query: query })
+
+    if (query) {
       BooksAPI.search(query, 30).then((books) => {
-        
-        if (books.length >= 1 && !books.error ) {
-          this.setState({showingBooks: books})
-    		 
+        if (books.length >= 1 && !books.error) {
+          this.setState({ showingBooks: books })
         } else if (books.error) {
           console.log("error, no books found")
-          this.setState({showingBooks: []})
+          this.setState({ showingBooks: [] })
         } else {
           console.log("no books found")
-          this.setState({showingBooks: []})
+          this.setState({ showingBooks: [] })
         }
       })
-        }}
-      
-     
-	
-
-		/*
-            */
-   
-
-
-  
-
+    }
+  }
 
   render() {
-    const { query, showingBooks, currentShelf} = this.state	
-	//const { books } = this.props
-	//let  currentShelf  = 'none'
-	/*
-	let currentShelf = 'none'
-	for (let instance of books) {
-		if(instance.id === book.id) {
-			currentShelf = instance.shelf
-			break
-		}
-	}
-*/
+    const { query, showingBooks} = this.state
+	
+	
     return (
       <div className="search-books">
-
         <div className="search-books-bar">
           <Link className="close-search" to="/">
             Close
           </Link>
           <div className="search-books-input-wrapper">
-      
             <input
               type="text"
               value={query}
@@ -101,8 +82,7 @@ class SearchPage extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {showingBooks.map((book, id) => (
-              <li key={book.id} >
-				
+              <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div
@@ -111,25 +91,28 @@ class SearchPage extends Component {
                         width: 128,
                         height: 193,
                         backgroundImage:
-                          book.imageLinks === undefined ? 'url("  http://via.placeholder.com/128x193?text=No%20Cover  ")' : 'url("' + book.imageLinks.thumbnail + '")'
+                          book.imageLinks === undefined
+                            ? 'url("  http://via.placeholder.com/128x193?text=No%20Cover  ")'
+                            : 'url("' + book.imageLinks.thumbnail + '")'
                       }}
                     />
                     <div className="book-shelf-changer">
+                     
 
-						
-						{this.getCurrentShelf(book)}
-						
                       <select
-                        onChange={(event) => {this.props.updateShelf(book, event.target.value)}} 
-						//onClick={this.getCurrentShelf()}
+                        onChange={(event) => {
+                          this.props.updateShelf(book, event.target.value)
+                        }}
+                        defaultValue={this.getCurrentShelf(book)}
 						
-						defaultValue={currentShelf}
-						
-
-						
-                      >	
-                        <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading"> Currently Reading </option>
+                      >
+                        <option value="move" disabled>
+                          Move to...
+                        </option>
+                        <option value="currentlyReading">
+                          {" "}
+                          Currently Reading{" "}
+                        </option>
                         <option value="wantToRead">Want to Read</option>
                         <option value="read"> Read</option>
                         <option value="none">None</option>
@@ -137,7 +120,9 @@ class SearchPage extends Component {
                     </div>
                   </div>
                   <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
+                  <div className="book-authors">
+                    {book.authors ? book.authors.join(", ") : ""}
+                  </div>
                 </div>
               </li>
             ))}
