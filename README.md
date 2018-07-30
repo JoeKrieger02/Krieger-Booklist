@@ -1,4 +1,11 @@
-# MyReads Project
+# MyReads Project (REACT)
+
+## Functionalities 
+* Search for new books with keywords
+* Add books to a specific bookshelf 
+* The bookshelf value is saved between the search page and the front page and linked to each specific book
+* Search bar queries multiple words
+
 
 ## To get started :
 * install all project dependencies with `npm install`
